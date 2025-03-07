@@ -4,14 +4,21 @@ import { Player } from '@/types';
 import PlayerForm from '@/components/PlayerForm';
 import PlayerList from '@/components/PlayerList';
 import GroupDisplay from '@/components/GroupDisplay';
-import { createOptimalGroups } from '@/utils/groupUtils';
+import { createOptimalGroups, shuffleGroups } from '@/utils/groupUtils';
 import { useToast } from '@/hooks/use-toast';
-import { Shield, Heart, Crosshair, Users } from 'lucide-react';
+import { Shield, Heart, Crosshair, Users, Shuffle } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 const Index = () => {
   const [players, setPlayers] = useState<Player[]>([]);
   const { toast } = useToast();
-  const { groups, unassigned } = createOptimalGroups(players);
+  const [groups, setGroups] = useState<ReturnType<typeof createOptimalGroups>>({ groups: [], unassigned: [] });
+  
+  useEffect(() => {
+    // Update groups when players change
+    const newGroups = createOptimalGroups(players);
+    setGroups(newGroups);
+  }, [players]);
   
   const addPlayer = (player: Player) => {
     setPlayers(prev => [...prev, player]);
@@ -22,6 +29,25 @@ const Index = () => {
     toast({
       title: "Player removed",
       description: "The player has been removed from the list",
+    });
+  };
+
+  const handleShuffleGroups = () => {
+    if (groups.groups.length <= 1) {
+      toast({
+        title: "Cannot shuffle",
+        description: "Need at least 2 groups to shuffle",
+        variant: "destructive"
+      });
+      return;
+    }
+    
+    const shuffledGroups = shuffleGroups(groups.groups);
+    setGroups(prev => ({ ...prev, groups: shuffledGroups }));
+    
+    toast({
+      title: "Groups shuffled",
+      description: "Players have been randomly redistributed between groups",
     });
   };
 
@@ -67,7 +93,20 @@ const Index = () => {
           <div className="lg:col-span-2 space-y-8">
             <PlayerList players={players} onRemovePlayer={removePlayer} />
             
-            <GroupDisplay groups={groups} unassigned={unassigned} />
+            {groups.groups.length > 0 && (
+              <div className="flex justify-end mb-4">
+                <Button 
+                  onClick={handleShuffleGroups} 
+                  variant="secondary"
+                  className="flex items-center gap-2"
+                >
+                  <Shuffle className="h-4 w-4" />
+                  Shuffle Groups
+                </Button>
+              </div>
+            )}
+            
+            <GroupDisplay groups={groups.groups} unassigned={groups.unassigned} />
           </div>
         </div>
       </div>

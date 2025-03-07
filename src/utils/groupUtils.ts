@@ -1,4 +1,3 @@
-
 import { Player, Group, Role } from '@/types';
 
 export const createOptimalGroups = (players: Player[]): { groups: Group[], unassigned: Player[] } => {
@@ -55,4 +54,35 @@ export const countByRole = (players: Player[]): Record<Role, number> => {
     'Healer': players.filter(p => p.role === 'Healer').length,
     'DPS': players.filter(p => p.role === 'DPS').length
   };
+};
+
+// Shuffle groups by randomly redistributing players while maintaining role requirements
+export const shuffleGroups = (groups: Group[]): Group[] => {
+  if (groups.length <= 1) {
+    return [...groups]; // No need to shuffle with 0 or 1 group
+  }
+  
+  // Extract all players from groups
+  const tanks: Player[] = groups.map(g => g.tank!).filter(Boolean);
+  const healers: Player[] = groups.map(g => g.healer!).filter(Boolean);
+  const allDps: Player[] = groups.flatMap(g => g.dps);
+  
+  // Shuffle players of each role independently
+  const shuffledTanks = [...tanks].sort(() => Math.random() - 0.5);
+  const shuffledHealers = [...healers].sort(() => Math.random() - 0.5);
+  const shuffledDps = [...allDps].sort(() => Math.random() - 0.5);
+  
+  // Create new groups with shuffled players
+  const shuffledGroups = groups.map((group, index) => {
+    const dpsForGroup = shuffledDps.slice(index * 3, (index + 1) * 3);
+    
+    return {
+      ...group,
+      tank: shuffledTanks[index] || null,
+      healer: shuffledHealers[index] || null,
+      dps: dpsForGroup
+    };
+  });
+  
+  return shuffledGroups;
 };
