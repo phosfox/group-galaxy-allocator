@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { Player } from '@/types';
 import PlayerForm from '@/components/PlayerForm';
@@ -15,7 +14,6 @@ const Index = () => {
   const [groups, setGroups] = useState<ReturnType<typeof createOptimalGroups>>({ groups: [], unassigned: [] });
   
   useEffect(() => {
-    // Update groups when players change
     const newGroups = createOptimalGroups(players);
     setGroups(newGroups);
   }, [players]);
@@ -56,7 +54,7 @@ const Index = () => {
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-8">
           <h1 className="text-4xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-600">
-            Group Galaxy Allocator
+            Bekanntenkreis Allokator
           </h1>
           <p className="mt-3 text-xl text-muted-foreground">
             Organize your team into optimal groups
