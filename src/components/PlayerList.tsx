@@ -34,7 +34,7 @@ const PlayerList = ({ players, onRemovePlayer }: PlayerListProps) => {
   if (players.length === 0) {
     return (
       <Card>
-        <CardHeader>
+        <CardHeader className="pb-2">
           <CardTitle>Player List</CardTitle>
         </CardHeader>
         <CardContent>
@@ -46,8 +46,8 @@ const PlayerList = ({ players, onRemovePlayer }: PlayerListProps) => {
 
   return (
     <Card>
-      <CardHeader>
-        <CardTitle className="flex items-center justify-between">
+      <CardHeader className="pb-2">
+        <CardTitle className="flex items-center justify-between text-xl">
           <span>Player List ({players.length})</span>
           <div className="flex space-x-2">
             <Badge variant="outline" className="bg-tank/10 text-tank-light">
@@ -62,28 +62,28 @@ const PlayerList = ({ players, onRemovePlayer }: PlayerListProps) => {
           </div>
         </CardTitle>
       </CardHeader>
-      <CardContent className="space-y-6">
+      <CardContent className="space-y-3">
         {Object.entries(playersByRole).map(([role, rolePlayers]) => (
           rolePlayers.length > 0 && (
-            <div key={role} className="space-y-2">
-              <h3 className="font-medium flex items-center">
+            <div key={role} className="space-y-1">
+              <h3 className="font-medium flex items-center text-sm mb-1">
                 <RoleIcon role={role as Role} />
                 <span className="ml-2">{role}s ({rolePlayers.length})</span>
               </h3>
-              <div className="space-y-1">
+              <div className="grid grid-cols-1 gap-1">
                 {rolePlayers.map(player => (
                   <div 
                     key={player.id} 
-                    className={`flex items-center justify-between p-2 rounded-md bg-secondary`}
+                    className="flex items-center justify-between py-1 px-2 rounded-md bg-secondary"
                   >
-                    <span>{player.name}</span>
+                    <span className="truncate">{player.name}</span>
                     <Button 
                       variant="ghost" 
                       size="icon" 
                       onClick={() => onRemovePlayer(player.id)}
-                      className="h-6 w-6"
+                      className="h-6 w-6 ml-1"
                     >
-                      <X className="h-4 w-4" />
+                      <X className="h-3 w-3" />
                     </Button>
                   </div>
                 ))}
