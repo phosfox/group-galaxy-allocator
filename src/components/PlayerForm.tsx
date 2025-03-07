@@ -11,9 +11,10 @@ import { Shield, Heart, Crosshair } from 'lucide-react';
 
 interface PlayerFormProps {
   onAddPlayer: (player: Player) => void;
+  players: Player[]; // Added players prop to check for duplicates
 }
 
-const PlayerForm = ({ onAddPlayer }: PlayerFormProps) => {
+const PlayerForm = ({ onAddPlayer, players }: PlayerFormProps) => {
   const [name, setName] = useState('');
   const [role, setRole] = useState<Role | ''>('');
   const { toast } = useToast();
@@ -25,6 +26,19 @@ const PlayerForm = ({ onAddPlayer }: PlayerFormProps) => {
       toast({
         title: "Name required",
         description: "Please enter a player name",
+        variant: "destructive"
+      });
+      return;
+    }
+    
+    // Check for duplicate name
+    const normalizedName = name.trim().toLowerCase();
+    const isDuplicate = players.some(player => player.name.toLowerCase() === normalizedName);
+    
+    if (isDuplicate) {
+      toast({
+        title: "Duplicate name",
+        description: "A player with this name already exists",
         variant: "destructive"
       });
       return;

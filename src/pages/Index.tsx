@@ -65,7 +65,7 @@ const Index = () => {
         
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="lg:col-span-1 space-y-6">
-            <PlayerForm onAddPlayer={addPlayer} />
+            <PlayerForm onAddPlayer={addPlayer} players={players} />
             
             <div className="bg-secondary/30 rounded-lg p-4 border border-border">
               <h3 className="font-medium mb-2">Team Composition</h3>
