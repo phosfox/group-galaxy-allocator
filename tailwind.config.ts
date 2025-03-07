@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -51,6 +52,18 @@ export default {
 				card: {
 					DEFAULT: 'hsl(var(--card))',
 					foreground: 'hsl(var(--card-foreground))'
+				},
+				tank: {
+					DEFAULT: '#3b82f6',
+					light: '#93c5fd'
+				},
+				healer: {
+					DEFAULT: '#10b981',
+					light: '#6ee7b7'
+				},
+				dps: {
+					DEFAULT: '#ef4444',
+					light: '#fca5a5'
 				},
 				sidebar: {
 					DEFAULT: 'hsl(var(--sidebar-background))',
